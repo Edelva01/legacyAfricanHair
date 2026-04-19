@@ -35,8 +35,12 @@ window.addEventListener("load", () => {
 
 const googlePlaceCache = new Map();
 
-const fetchGooglePlaceData = async (apiKey, placeId, fieldMask) => {
+const fetchGooglePlaceData = async (apiKey, placeId, fieldMask, options = {}) => {
+  const { forceRefresh = false } = options;
   const cacheKey = `${apiKey}|${placeId}|${fieldMask}`;
+  if (forceRefresh) {
+    googlePlaceCache.delete(cacheKey);
+  }
   if (googlePlaceCache.has(cacheKey)) return googlePlaceCache.get(cacheKey);
 
   const request = fetch(`https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`, {
@@ -50,6 +54,10 @@ const fetchGooglePlaceData = async (apiKey, placeId, fieldMask) => {
       throw new Error(`Google Places request failed (${response.status})`);
     }
     return response.json();
+  }).catch((error) => {
+    // Do not keep failed requests in cache; allow next retry to recover.
+    googlePlaceCache.delete(cacheKey);
+    throw error;
   });
 
   googlePlaceCache.set(cacheKey, request);
@@ -226,6 +234,46 @@ if (googleReviewSummary && fiveStarReviewsSlider) {
   const config = window.LEGACY_GOOGLE_HOURS || {};
   const placeId = config.placeId || "ChIJQ9mMzOKpsYkRvmBVaSQ0u6o";
   const apiKey = (config.apiKey || "").trim();
+  const googlePlaceReviewsUrl = "https://www.google.com/maps/place/Legacy+African+Hair+Braiding/@37.2794785,-77.3091176,852m/data=!3m1!1e3!4m18!1m9!3m8!1s0x89b1a9e2cc8cd943:0xaabb3424695560be!2sLegacy+African+Hair+Braiding!8m2!3d37.2794785!4d-77.3091176!9m1!1b1!16s%2Fg%2F1tg6lfd5!3m7!1s0x89b1a9e2cc8cd943:0xaabb3424695560be!8m2!3d37.2794785!4d-77.3091176!9m1!1b1!16s%2Fg%2F1tg6lfd5?hl=en&entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D";
+  const reviewFieldMask = "rating,userRatingCount,reviews.rating,reviews.relativePublishTimeDescription,reviews.text,reviews.originalText,reviews.authorAttribution.displayName";
+  const reviewRefreshMs = 5 * 60 * 1000;
+  let reviewRotationTimerId = null;
+  let reviewRefreshTimerId = null;
+  let reviewRequestInFlight = false;
+  const ownerProvidedFiveStarReviews = [
+    {
+      rating: 5,
+      text: "Loved my style and the attention to detail. The braids were neat, lightweight, and lasted beautifully.",
+      authorAttribution: { displayName: "Client Highlight" },
+      relativePublishTimeDescription: "Owner-provided",
+      source: "Google Share",
+      sourceUrl: "https://share.google/IJx4WmYYHeXMZpWPs"
+    },
+    {
+      rating: 5,
+      text: "Very professional service, clean parts, and a welcoming atmosphere from start to finish.",
+      authorAttribution: { displayName: "Client Highlight" },
+      relativePublishTimeDescription: "Owner-provided",
+      source: "Google Share",
+      sourceUrl: googlePlaceReviewsUrl
+    },
+    {
+      rating: 5,
+      text: "Great communication and a style that matched exactly what I asked for. I will book again.",
+      authorAttribution: { displayName: "Client Highlight" },
+      relativePublishTimeDescription: "Owner-provided",
+      source: "Google Share",
+      sourceUrl: googlePlaceReviewsUrl
+    },
+    {
+      rating: 5,
+      text: "Fast, friendly, and high-quality work. My event-ready braids came out amazing.",
+      authorAttribution: { displayName: "Client Highlight" },
+      relativePublishTimeDescription: "Owner-provided",
+      source: "Google Share",
+      sourceUrl: googlePlaceReviewsUrl
+    }
+  ];
 
   const toReviewText = (review) => {
     return (
@@ -255,32 +303,51 @@ if (googleReviewSummary && fiveStarReviewsSlider) {
       meta.className = "review-meta";
       const author = review?.authorAttribution?.displayName || "Google Reviewer";
       const when = review?.relativePublishTimeDescription || "";
-      meta.textContent = when ? `${author} • ${when}` : author;
+      const sourceLabel = String(review?.source || "Google");
+      const authorLine = when ? `${author} • ${when}` : author;
+      meta.textContent = `${authorLine} • Source: ${sourceLabel}`;
 
+      const sourceUrl = String(
+        review?.sourceUrl ||
+          (sourceLabel.toLowerCase().includes("google") ? googlePlaceReviewsUrl : "")
+      ).trim();
       slide.appendChild(stars);
       slide.appendChild(text);
       slide.appendChild(meta);
+      if (sourceUrl) {
+        const sourceLink = document.createElement("a");
+        sourceLink.className = "review-source-link";
+        sourceLink.href = sourceUrl;
+        sourceLink.target = "_blank";
+        sourceLink.rel = "noopener noreferrer";
+        sourceLink.textContent = "View on Google";
+        slide.appendChild(sourceLink);
+      }
       fiveStarReviewsSlider.appendChild(slide);
     });
 
     const slides = Array.from(fiveStarReviewsSlider.querySelectorAll(".review-slide"));
     if (slides.length <= 1) return;
     let active = 0;
-    window.setInterval(() => {
+    if (reviewRotationTimerId) window.clearInterval(reviewRotationTimerId);
+    reviewRotationTimerId = window.setInterval(() => {
       slides[active].classList.remove("is-active");
       active = (active + 1) % slides.length;
       slides[active].classList.add("is-active");
     }, 4600);
   };
 
-  const loadGoogleReviews = async () => {
+  const loadGoogleReviews = async ({ forceRefresh = false } = {}) => {
+    if (reviewRequestInFlight) return;
     if (!apiKey) {
-      googleReviewSummary.textContent = "Google rating appears here when API key is connected.";
+      googleReviewSummary.textContent = "Showing 5-star highlights with Google source links.";
+      renderFiveStarSlides(ownerProvidedFiveStarReviews);
       return;
     }
 
+    reviewRequestInFlight = true;
     try {
-      const data = await fetchGooglePlaceData(apiKey, placeId, "rating,userRatingCount,reviews");
+      const data = await fetchGooglePlaceData(apiKey, placeId, reviewFieldMask, { forceRefresh });
       const rating = Number(data?.rating);
       const total = Number(data?.userRatingCount);
 
@@ -291,7 +358,13 @@ if (googleReviewSummary && fiveStarReviewsSlider) {
       }
 
       const reviews = Array.isArray(data?.reviews) ? data.reviews : [];
-      const fiveStarOnly = reviews.filter((review) => Number(review?.rating) >= 5);
+      const fiveStarOnly = reviews
+        .filter((review) => Number(review?.rating) >= 5)
+        .map((review) => ({
+          ...review,
+          source: "Google",
+          sourceUrl: googlePlaceReviewsUrl
+        }));
       if (!fiveStarOnly.length) {
         fiveStarReviewsSlider.innerHTML = `
           <article class="review-slide is-active">
@@ -307,10 +380,22 @@ if (googleReviewSummary && fiveStarReviewsSlider) {
     } catch (error) {
       googleReviewSummary.textContent = "Could not load Google reviews right now.";
       console.error(error);
+    } finally {
+      reviewRequestInFlight = false;
     }
   };
 
   loadGoogleReviews();
+  if (apiKey) {
+    reviewRefreshTimerId = window.setInterval(() => {
+      loadGoogleReviews({ forceRefresh: true });
+    }, reviewRefreshMs);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState !== "visible") return;
+      loadGoogleReviews({ forceRefresh: true });
+    });
+  }
 }
 
 if (heroLineTwo) {

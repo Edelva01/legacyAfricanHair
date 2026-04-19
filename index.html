@@ -150,7 +150,7 @@
         </p>
         <div class="hours-compact" aria-label="Salon hours">
           <strong>Hours</strong>
-          <span id="hoursStatus" class="hours-status">Hours shown below. Add Google API key for live sync.</span>
+          <span id="hoursStatus" class="hours-status">Hours shown below.</span>
           <span data-hours-day="MONDAY">Mon: 9:00 AM - 7:00 PM</span>
           <span data-hours-day="TUESDAY">Tue: 9:00 AM - 7:00 PM</span>
           <span data-hours-day="WEDNESDAY">Wed: 9:00 AM - 7:00 PM</span>
@@ -217,17 +217,9 @@
       <section class="reviews-section reveal" aria-label="Client testimonials and Google reviews">
         <div class="section">
           <h3>What Clients Say About Us</h3>
-          <p class="reviews-summary" id="googleReviewSummary">
-            Google review rating will appear here once API access is active.
-          </p>
-          <div class="reviews-slider" id="fiveStarReviewsSlider" aria-live="polite">
-            <article class="review-slide is-active">
-              <p class="review-stars" aria-label="5 out of 5 stars">★★★★★</p>
-              <p class="review-text">
-                Add your Google API key to display live 5-star client reviews here.
-              </p>
-              <p class="review-meta">Google Reviewer</p>
-            </article>
+          <div class="reviews-widget-wrap">
+            <!-- Elfsight Google Reviews | Legacy African Hair Braiding -->
+            <div class="elfsight-app-a5efa233-9e06-4f6b-a702-a29d1981df29" data-elfsight-app-lazy></div>
           </div>
         </div>
       </section>
@@ -301,9 +293,10 @@
     <script>
       window.LEGACY_GOOGLE_HOURS = {
         placeId: "ChIJQ9mMzOKpsYkRvmBVaSQ0u6o",
-        apiKey: ""
+        apiKey: "" // Add your restricted Google Places API key here.
       };
     </script>
     <script src="script.js"></script>
+    <script src="https://elfsightcdn.com/platform.js" async></script>
   </body>
 </html>

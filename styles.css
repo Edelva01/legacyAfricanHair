@@ -1921,6 +1921,10 @@ p {
   opacity: 0.95;
 }
 
+.hours-status:empty {
+  display: none;
+}
+
 #visit .hours-compact strong {
   color: #f3f7ff;
 }
@@ -2533,6 +2537,10 @@ body.modal-open {
   min-height: 13rem;
 }
 
+.reviews-widget-wrap {
+  margin-top: 0.9rem;
+}
+
 .review-slide {
   position: absolute;
   inset: 0;
@@ -2568,6 +2576,30 @@ body.modal-open {
   margin-top: 0.7rem;
   color: #5a6f89;
   font-size: 0.86rem;
+}
+
+.review-source-link {
+  display: inline-flex;
+  margin-top: 0.65rem;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #ffffff;
+  background: #0f4f8b;
+  border: 1px solid #0b3f6f;
+  border-radius: 999px;
+  padding: 0.42rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.review-source-link:hover,
+.review-source-link:focus-visible {
+  background: #1462a8;
+  box-shadow: 0 8px 18px rgba(15, 79, 139, 0.24);
+  transform: translateY(-1px);
 }
 
 .cta {
