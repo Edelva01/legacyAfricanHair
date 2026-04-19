@@ -249,9 +249,46 @@ p {
     radial-gradient(circle at 18% 64%, rgba(240, 208, 141, 0.26), transparent 38%);
 }
 
+.hero-center-logo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-center-logo-image {
+  width: clamp(7.5rem, 15vw, 12rem);
+  opacity: 0;
+  filter: drop-shadow(0 10px 24px rgba(4, 10, 20, 0.45));
+  --hero-logo-raise: -70%;
+  animation: heroCenterLogoPulse 14s ease-in-out infinite;
+}
+
+@keyframes heroCenterLogoPulse {
+  0%,
+  68%,
+  100% {
+    opacity: 0;
+    transform: translateY(var(--hero-logo-raise)) scale(0.9) rotate(-24deg);
+  }
+
+  72%,
+  82% {
+    opacity: 0.88;
+    transform: translateY(var(--hero-logo-raise)) scale(1) rotate(0deg);
+  }
+
+  90% {
+    opacity: 0;
+    transform: translateY(var(--hero-logo-raise)) scale(0.95) rotate(20deg);
+  }
+}
+
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
@@ -2998,6 +3035,10 @@ body.modal-open {
     min-height: 82vh;
   }
 
+  .hero-center-logo-image {
+    width: clamp(6.2rem, 20vw, 9rem);
+  }
+
   .hero-content {
     padding-left: clamp(0.7rem, 4.2vw, 1rem);
     padding-right: clamp(0.7rem, 4.2vw, 1rem);
@@ -3177,6 +3218,10 @@ body.modal-open {
 
   .hero {
     min-height: 76vh;
+  }
+
+  .hero-center-logo-image {
+    width: clamp(5.4rem, 24vw, 7.6rem);
   }
 
   .hero h1 {
