@@ -20,6 +20,7 @@ const dualPhotoLeft = document.getElementById("dualPhotoLeft");
 const dualPhotoRight = document.getElementById("dualPhotoRight");
 const mainPhotoCaption = document.querySelector(".main-photo-caption");
 const captionMotionLines = Array.from(document.querySelectorAll(".caption-motion-text .motion-line:not(.billboard-dynamic)"));
+const appointmentFlashCloud = document.getElementById("appointmentFlashCloud");
 
 window.addEventListener("load", () => {
   document.body.classList.add("loaded");
@@ -253,6 +254,208 @@ const updateScrollProgress = () => {
 
 window.addEventListener("scroll", updateScrollProgress, { passive: true });
 updateScrollProgress();
+
+if (appointmentFlashCloud) {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const flashPhrases = [
+    "Hair Washing",
+    "Braid Removal",
+    "Graduation Ready Styles",
+    "Wedding and Marriage Styling",
+    "Engagement Event Braids",
+    "Formal Gala Braiding Looks",
+    "Bridal Shower Hair Styling",
+    "Black Tie Event Ready Braids",
+    "Corporate Event Polished Braids",
+    "Church Service Elegant Styles",
+    "Birthday Glam Braids",
+    "Date Night Signature Braids",
+    "Girls Night Out Styles",
+    "Family Reunion Fresh Braids",
+    "Weekend Getaway Hair Prep",
+    "Anniversary Fresh Looks",
+    "Interview and Career Styles",
+    "Prom and Homecoming Braids",
+    "Casual Hangout Fresh Looks",
+    "Everyday Quick Refresh Styling",
+    "Festival and Party Ready Braids",
+    "Celebrate Your Next Milestone",
+    "Your Event, Your Signature Look",
+    "Book your appointment today"
+  ];
+  const flashColors = ["#1b446f", "#295e90", "#987136", "#1f6e5f", "#8f4a35", "#6b4f95"];
+  const flashMotions = [
+    "flash-drift-up",
+    "flash-drift-side",
+    "flash-drift-zoom",
+    "flash-pop",
+    "flash-dance",
+    "flash-swing",
+    "flash-firecracker",
+    "flash-cross-ltr",
+    "flash-cross-rtl"
+  ];
+  const flashEasing = [
+    "cubic-bezier(0.22, 0.61, 0.36, 1)",
+    "cubic-bezier(0.2, 0.7, 0.24, 1)",
+    "cubic-bezier(0.16, 0.84, 0.35, 1)"
+  ];
+
+  let phraseBag = [];
+  let lastPhrase = "";
+  let activeNodeCount = 0;
+  const activeTimers = new Map();
+
+  const randomInRange = (min, max) => min + Math.random() * (max - min);
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const shuffle = (arr) => {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  };
+  const nextPhrase = () => {
+    if (!phraseBag.length) phraseBag = shuffle([...flashPhrases]);
+    let phrase = phraseBag.pop();
+    if (phrase === lastPhrase && phraseBag.length) phrase = phraseBag.pop();
+    lastPhrase = phrase;
+    return phrase;
+  };
+
+  const clearFlashTimers = () => {
+    activeTimers.forEach((timerId) => window.clearTimeout(timerId));
+    activeTimers.clear();
+  };
+
+  const renderReducedMotionState = () => {
+    appointmentFlashCloud.innerHTML = "";
+    const compactPhrases = ["Hair Washing", "Braid Removal", "Formal and Informal Event Styles"];
+    compactPhrases.forEach((label, idx) => {
+      const node = document.createElement("span");
+      node.className = "flash-item";
+      node.textContent = label;
+      node.style.left = `${14 + idx * 28}%`;
+      node.style.top = `${36 + idx * 7}%`;
+      node.style.fontSize = "1rem";
+      node.style.color = "#1d446f";
+      node.style.opacity = "1";
+      appointmentFlashCloud.appendChild(node);
+    });
+  };
+
+  const getSizeProfile = () => {
+    const roll = Math.random();
+    const desktop = window.innerWidth > 980;
+    if (roll < 0.2) {
+      return { min: desktop ? 1.8 : 1.45, max: desktop ? 3.15 : 2.15, firecrackerBias: true };
+    }
+    if (roll < 0.58) {
+      return { min: 0.9, max: 1.3, firecrackerBias: false };
+    }
+    return { min: 1.08, max: desktop ? 1.8 : 1.45, firecrackerBias: false };
+  };
+
+  const styleFlashNode = (node) => {
+    const cloudRect = appointmentFlashCloud.getBoundingClientRect();
+    const maxX = cloudRect.width > 700 ? 72 : 74;
+    const maxY = cloudRect.height > 160 ? 70 : 66;
+    const slot = Number(node.dataset.slot || 0);
+    const isDuoDanceBeat = activeNodeCount === 2 && Math.random() < 0.36;
+    const sizeProfile = getSizeProfile();
+
+    node.textContent = nextPhrase();
+
+    if (isDuoDanceBeat) {
+      const center = 50;
+      const spread = randomInRange(10, 17);
+      node.style.left = `${slot === 0 ? center - spread : center + spread}%`;
+      node.style.top = `${randomInRange(24, 62)}%`;
+    } else {
+      node.style.left = `${randomInRange(8, maxX)}%`;
+      node.style.top = `${randomInRange(12, maxY)}%`;
+    }
+
+    node.style.fontSize = `${randomInRange(sizeProfile.min, sizeProfile.max).toFixed(2)}rem`;
+
+    const driftX = randomInRange(-22, 32);
+    const pairedDriftX = isDuoDanceBeat ? (slot === 0 ? Math.abs(driftX) : -Math.abs(driftX)) : driftX;
+    node.style.setProperty("--flash-drift-x", `${pairedDriftX.toFixed(0)}px`);
+    node.style.setProperty("--flash-drift-y", `${randomInRange(-20, 16).toFixed(0)}px`);
+    node.style.setProperty("--flash-opacity", randomInRange(0.84, 0.97).toFixed(2));
+    node.style.setProperty("--flash-color", pick(flashColors));
+    node.style.animationDuration = `${randomInRange(2.3, 5.2).toFixed(2)}s`;
+    node.style.animationTimingFunction = pick(flashEasing);
+    node.style.setProperty("--cross-start", "-180px");
+    node.style.setProperty("--cross-end", "520px");
+
+    let motion = pick(flashMotions);
+    if (isDuoDanceBeat) motion = "flash-dance";
+    if (sizeProfile.firecrackerBias && Math.random() < 0.42) motion = "flash-firecracker";
+    if (Math.random() < 0.18) motion = "flash-swing";
+    if (Math.random() < 0.22) motion = "flash-pop";
+    if (!isDuoDanceBeat && Math.random() < 0.38) {
+      motion = Math.random() < 0.5 ? "flash-cross-ltr" : "flash-cross-rtl";
+    }
+
+    if (motion === "flash-cross-ltr" || motion === "flash-cross-rtl") {
+      const nodeWidth = Math.max(node.offsetWidth, 120);
+      const travelPad = 28;
+      const fromLeft = -nodeWidth - travelPad;
+      const toRight = cloudRect.width + travelPad;
+      node.style.left = "0px";
+      node.style.top = `${randomInRange(16, 68)}%`;
+      node.style.animationDuration = `${randomInRange(4.2, 7.4).toFixed(2)}s`;
+      if (motion === "flash-cross-ltr") {
+        node.style.setProperty("--cross-start", `${fromLeft.toFixed(0)}px`);
+        node.style.setProperty("--cross-end", `${toRight.toFixed(0)}px`);
+      } else {
+        node.style.setProperty("--cross-start", `${toRight.toFixed(0)}px`);
+        node.style.setProperty("--cross-end", `${fromLeft.toFixed(0)}px`);
+      }
+    }
+
+    node.classList.remove(...flashMotions);
+    void node.offsetWidth;
+    node.classList.add(motion);
+  };
+
+  const scheduleFlashCycle = (node) => {
+    styleFlashNode(node);
+    const waitMs = Math.floor(randomInRange(1400, 3200));
+    const timerId = window.setTimeout(() => scheduleFlashCycle(node), waitMs);
+    activeTimers.set(node, timerId);
+  };
+
+  const initializeFlashCloud = () => {
+    clearFlashTimers();
+    if (prefersReducedMotion) {
+      renderReducedMotionState();
+      return;
+    }
+
+    appointmentFlashCloud.innerHTML = "";
+    const nodeCount = window.innerWidth <= 760 ? 1 : 2;
+    activeNodeCount = nodeCount;
+    for (let i = 0; i < nodeCount; i += 1) {
+      const node = document.createElement("span");
+      node.className = "flash-item";
+      node.dataset.slot = String(i);
+      appointmentFlashCloud.appendChild(node);
+      const starterDelay = i === 0 ? Math.floor(randomInRange(80, 280)) : Math.floor(randomInRange(1300, 2800));
+      const timerId = window.setTimeout(() => scheduleFlashCycle(node), starterDelay);
+      activeTimers.set(node, timerId);
+    }
+  };
+
+  initializeFlashCloud();
+  let resizeTimerId = null;
+  window.addEventListener("resize", () => {
+    if (resizeTimerId) window.clearTimeout(resizeTimerId);
+    resizeTimerId = window.setTimeout(() => initializeFlashCloud(), 220);
+  });
+}
 
 if (galleryBillboard && mainPhotoCurrent && mainPhotoNext) {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

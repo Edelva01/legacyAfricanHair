@@ -1993,6 +1993,10 @@ p {
   border-bottom: 0;
 }
 
+#contact .section {
+  position: relative;
+}
+
 .contact h2 {
   font-family: "Space Grotesk", sans-serif;
   font-size: clamp(2rem, 6vw, 5.4rem);
@@ -2006,6 +2010,334 @@ p {
   color: #2a3f5b;
   font-size: 1rem;
   font-weight: 600;
+}
+
+.appointment-flash-intro {
+  margin: 0 0 0.85rem;
+  max-width: 62ch;
+  color: #25405e;
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.appointment-flash-cloud {
+  position: relative;
+  margin: 0 0 1rem;
+  min-height: clamp(7rem, 16vw, 11rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.appointment-flash-cloud .flash-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: center;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  white-space: nowrap;
+  color: var(--flash-color, #1e426b);
+  opacity: 0;
+  pointer-events: none;
+  text-shadow:
+    0 0 12px rgba(255, 255, 255, 0.82),
+    0 6px 20px rgba(25, 52, 85, 0.14);
+  will-change: transform, opacity;
+}
+
+.appointment-flash-cloud .flash-drift-up {
+  animation-name: appointmentCreditRise;
+  animation-fill-mode: both;
+}
+
+.appointment-flash-cloud .flash-drift-side {
+  animation-name: appointmentCreditSweep;
+  animation-fill-mode: both;
+}
+
+.appointment-flash-cloud .flash-drift-zoom {
+  animation-name: appointmentCreditReveal;
+  animation-fill-mode: both;
+}
+
+.appointment-flash-cloud .flash-pop {
+  animation-name: appointmentCreditPop;
+  animation-fill-mode: both;
+}
+
+.appointment-flash-cloud .flash-dance {
+  animation-name: appointmentCreditDance;
+  animation-fill-mode: both;
+}
+
+.appointment-flash-cloud .flash-swing {
+  animation-name: appointmentCreditSwing;
+  animation-fill-mode: both;
+  transform-origin: top center;
+}
+
+.appointment-flash-cloud .flash-firecracker {
+  animation-name: appointmentCreditFirecracker;
+  animation-fill-mode: both;
+}
+
+.appointment-flash-cloud .flash-cross-ltr {
+  animation-name: appointmentCreditCrossLTR;
+  animation-fill-mode: both;
+}
+
+.appointment-flash-cloud .flash-cross-rtl {
+  animation-name: appointmentCreditCrossRTL;
+  animation-fill-mode: both;
+}
+
+@keyframes appointmentCreditRise {
+  0% {
+    opacity: 0;
+    transform: translate3d(-16px, 22px, 0) scale(0.9) rotate(-2deg);
+    filter: blur(1.4px);
+  }
+  20% {
+    opacity: var(--flash-opacity, 0.94);
+    filter: blur(0);
+  }
+  74% {
+    opacity: var(--flash-opacity, 0.94);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--flash-drift-x, 20px), var(--flash-drift-y, -18px), 0) scale(1.06) rotate(1deg);
+    filter: blur(0.7px);
+  }
+}
+
+@keyframes appointmentCreditSweep {
+  0% {
+    opacity: 0;
+    transform: translate3d(-28px, 0, 0) scale(0.88);
+    filter: blur(1px);
+  }
+  22% {
+    opacity: var(--flash-opacity, 0.9);
+    filter: blur(0);
+  }
+  72% {
+    opacity: var(--flash-opacity, 0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--flash-drift-x, 30px), var(--flash-drift-y, -6px), 0) scale(1.02);
+    filter: blur(0.8px);
+  }
+}
+
+@keyframes appointmentCreditReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.76);
+    letter-spacing: 0.14em;
+    filter: blur(1.2px);
+  }
+  16% {
+    opacity: var(--flash-opacity, 0.95);
+    letter-spacing: 0.1em;
+    filter: blur(0);
+  }
+  74% {
+    opacity: var(--flash-opacity, 0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--flash-drift-x, -12px), var(--flash-drift-y, -16px), 0) scale(1.14);
+    letter-spacing: 0.13em;
+    filter: blur(0.8px);
+  }
+}
+
+@keyframes appointmentCreditPop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.74);
+    filter: blur(1.2px);
+  }
+  24% {
+    opacity: var(--flash-opacity, 0.96);
+    transform: translate3d(0, 0, 0) scale(1.25);
+    filter: blur(0);
+  }
+  56% {
+    opacity: var(--flash-opacity, 0.96);
+    transform: translate3d(0, -2px, 0) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--flash-drift-x, 8px), var(--flash-drift-y, -12px), 0) scale(1.18);
+    filter: blur(0.9px);
+  }
+}
+
+@keyframes appointmentCreditDance {
+  0% {
+    opacity: 0;
+    transform: translate3d(-10px, 8px, 0) scale(0.88) rotate(-5deg);
+  }
+  20% {
+    opacity: var(--flash-opacity, 0.92);
+  }
+  36% {
+    transform: translate3d(8px, -3px, 0) scale(1.04) rotate(4deg);
+  }
+  56% {
+    transform: translate3d(-7px, -2px, 0) scale(1.02) rotate(-4deg);
+  }
+  78% {
+    opacity: var(--flash-opacity, 0.92);
+    transform: translate3d(6px, -5px, 0) scale(1.01) rotate(3deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--flash-drift-x, 12px), var(--flash-drift-y, -8px), 0) scale(1.06) rotate(-2deg);
+  }
+}
+
+@keyframes appointmentCreditSwing {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0) rotate(-16deg) scale(0.86);
+  }
+  18% {
+    opacity: var(--flash-opacity, 0.9);
+  }
+  32% {
+    transform: translate3d(0, 2px, 0) rotate(14deg) scale(1);
+  }
+  48% {
+    transform: translate3d(0, 1px, 0) rotate(-12deg) scale(1.02);
+  }
+  66% {
+    transform: translate3d(0, 0, 0) rotate(9deg) scale(1);
+  }
+  82% {
+    opacity: var(--flash-opacity, 0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--flash-drift-x, 8px), var(--flash-drift-y, -10px), 0) rotate(-4deg) scale(1.06);
+  }
+}
+
+@keyframes appointmentCreditFirecracker {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.42);
+    filter: blur(1.4px);
+  }
+  18% {
+    opacity: 1;
+    transform: translate3d(0, -3px, 0) scale(1.42);
+    filter: blur(0);
+  }
+  46% {
+    opacity: var(--flash-opacity, 0.96);
+    transform: translate3d(0, -6px, 0) scale(1.92);
+    text-shadow:
+      0 0 18px rgba(255, 255, 255, 0.95),
+      0 0 30px rgba(145, 188, 255, 0.45),
+      0 8px 22px rgba(26, 55, 90, 0.24);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--flash-drift-x, 14px), var(--flash-drift-y, -16px), 0) scale(2.28);
+    filter: blur(1px);
+  }
+}
+
+@keyframes appointmentCreditCrossLTR {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--cross-start, -180px), 0, 0) scale(0.92);
+    filter: blur(1px);
+  }
+  14% {
+    opacity: var(--flash-opacity, 0.9);
+    filter: blur(0);
+  }
+  84% {
+    opacity: var(--flash-opacity, 0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--cross-end, 520px), 0, 0) scale(1.05);
+    filter: blur(0.8px);
+  }
+}
+
+@keyframes appointmentCreditCrossRTL {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--cross-start, 520px), 0, 0) scale(0.92);
+    filter: blur(1px);
+  }
+  14% {
+    opacity: var(--flash-opacity, 0.9);
+    filter: blur(0);
+  }
+  84% {
+    opacity: var(--flash-opacity, 0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--cross-end, -180px), 0, 0) scale(1.05);
+    filter: blur(0.8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appointment-flash-cloud .flash-item {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 981px) {
+  #contact .section {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(290px, 0.95fr);
+    column-gap: clamp(1rem, 3vw, 2rem);
+    align-items: start;
+  }
+
+  .contact h2,
+  .deposit-note,
+  .appointment-flash-intro,
+  .cta-group {
+    grid-column: 1;
+  }
+
+  .appointment-flash-cloud {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    margin: 0;
+    min-height: clamp(9rem, 23vw, 15rem);
+    align-self: center;
+  }
+
+  .cta-group {
+    margin-top: 0.2rem;
+  }
+}
+
+@media (max-width: 980px) {
+  #contact .section {
+    display: block;
+  }
 }
 
 .map-section {
