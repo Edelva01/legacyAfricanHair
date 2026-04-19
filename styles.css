@@ -394,12 +394,9 @@ p {
   padding-top: 0.95rem;
   padding-bottom: 1.1rem;
   background: #ffffff;
-  border-top: 1px solid #d6e0ee;
-  border-bottom: 1px solid #d6e0ee;
-  border-left: 0;
-  border-right: 0;
+  border: 0;
   border-radius: 0;
-  box-shadow: 0 8px 20px rgba(22, 41, 68, 0.1);
+  box-shadow: none;
 }
 
 .hero + .signature-banner {
@@ -627,10 +624,7 @@ p {
   margin-right: calc(50% - 50vw);
   padding-left: var(--case-pad-l);
   padding-right: var(--case-pad-r);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  border-left: 0;
-  border-right: 0;
+  border: 0;
   border-radius: 0;
   background: #ffffff;
   overflow: hidden;
@@ -1146,8 +1140,8 @@ p {
 }
 
 .gallery-billboard {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  border-top: 0;
+  border-bottom: 0;
   background:
     radial-gradient(circle at 10% 20%, rgba(216, 194, 150, 0.25), transparent 35%),
     radial-gradient(circle at 88% 78%, rgba(157, 189, 234, 0.25), transparent 35%),
@@ -2544,10 +2538,7 @@ body.modal-open {
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   background: rgba(255, 255, 255, 0.97);
-  border-top: 1px solid #d4dfed;
-  border-bottom: 0;
-  border-left: 0;
-  border-right: 0;
+  border: 0;
   border-radius: 0;
   box-shadow: none;
   padding: clamp(0.9rem, 2.3vw, 1.4rem);
@@ -2585,9 +2576,8 @@ body.modal-open {
 }
 
 .reviews-section .section {
-  border-top: 1px solid #d7e2ef;
-  border-bottom: 1px solid #d7e2ef;
-  background: rgba(255, 255, 255, 0.97);
+  border: 0;
+  background: #ffffff;
   padding: clamp(1rem, 2.5vw, 1.4rem);
 }
 
