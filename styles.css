@@ -2116,8 +2116,8 @@ p {
 }
 
 .footer-logo {
-  width: clamp(6rem, 11vw, 8rem);
-  height: clamp(6rem, 11vw, 8rem);
+  width: clamp(12rem, 22vw, 16rem);
+  height: clamp(12rem, 22vw, 16rem);
   object-fit: contain;
   border-radius: 999px;
   border: 1px solid rgba(227, 203, 154, 0.38);
@@ -2227,7 +2227,7 @@ p {
 
 @media (min-width: 761px) {
   .footer-shell {
-    grid-template-columns: minmax(120px, 150px) minmax(0, 1fr);
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
     align-items: start;
   }
 
@@ -2236,6 +2236,8 @@ p {
     grid-row: 1 / span 4;
     justify-self: start;
     align-self: start;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .footer-highlights,
@@ -2560,8 +2562,11 @@ p {
   }
 
   .footer-logo {
-    width: clamp(5.8rem, 24vw, 7.4rem);
-    height: clamp(5.8rem, 24vw, 7.4rem);
+    width: clamp(10.5rem, 48vw, 14rem);
+    height: clamp(10.5rem, 48vw, 14rem);
+    justify-self: center;
+    align-self: center;
+    margin: 0 auto;
   }
 
   .link-grid {
@@ -2682,8 +2687,10 @@ p {
   }
 
   .footer-logo {
-    width: clamp(5.2rem, 28vw, 6.6rem);
-    height: clamp(5.2rem, 28vw, 6.6rem);
+    width: clamp(9.8rem, 56vw, 13.2rem);
+    height: clamp(9.8rem, 56vw, 13.2rem);
+    justify-self: center;
+    margin: 0 auto;
   }
 
   .floating-call {
