@@ -260,6 +260,9 @@ if (appointmentFlashCloud) {
   const flashPhrases = [
     "Hair Washing",
     "Braid Removal",
+    "Long Braids",
+    "Short Braids",
+    "Wig Preparation",
     "Graduation Ready Styles",
     "Wedding and Marriage Styling",
     "Engagement Event Braids",
@@ -279,6 +282,9 @@ if (appointmentFlashCloud) {
     "Casual Hangout Fresh Looks",
     "Everyday Quick Refresh Styling",
     "Festival and Party Ready Braids",
+    "Book for Yourself",
+    "Gift a Loved One a Style",
+    "Book an Appointment as a Gift",
     "Celebrate Your Next Milestone",
     "Your Event, Your Signature Look",
     "Book your appointment today"
