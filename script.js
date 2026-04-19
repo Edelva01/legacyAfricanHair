@@ -8,6 +8,7 @@ const previewTitle = document.getElementById("previewTitle");
 const previewDescription = document.getElementById("previewDescription");
 const casePreview = document.getElementById("casePreview");
 const casePreviewCopy = document.querySelector(".case-preview-copy");
+const heroLineTwo = document.querySelector(".hero .line2");
 const hero = document.querySelector(".hero");
 const heroVideo = document.querySelector(".hero-video");
 const scrollProgress = document.getElementById("scrollProgress");
@@ -23,6 +24,52 @@ const captionMotionLines = Array.from(document.querySelectorAll(".caption-motion
 window.addEventListener("load", () => {
   document.body.classList.add("loaded");
 });
+
+if (heroLineTwo) {
+  const lineTwoPalette = [
+    "#4b8fcb", // blue
+    "#64a8e2", // light blue
+    "#3f79b3", // deep blue
+    "#63b88b", // green
+    "#84cf9d", // mint green
+    "#d8b65a", // gold
+    "#f0cf70", // warm gold
+    "#d59c53", // amber / brown
+    "#a26f43", // brown
+    "#e2b56a", // tan gold
+    "#e27a46", // orange
+    "#d95d4f", // red
+    "#f1d26f" // yellow
+  ];
+
+  let lastLineTwoColor = "";
+  let lineTwoTimer = null;
+
+  const pickNextLineTwoColor = () => {
+    const pool = lineTwoPalette.filter((color) => color !== lastLineTwoColor);
+    return pool[Math.floor(Math.random() * pool.length)] || lineTwoPalette[0];
+  };
+
+  const applyLineTwoColor = () => {
+    const nextColor = pickNextLineTwoColor();
+    lastLineTwoColor = nextColor;
+    heroLineTwo.style.setProperty("--hero-line2-color", nextColor);
+  };
+
+  // Trigger the noticeable shift right as the line comes back from fade-out.
+  const queueLineTwoColorShift = () => {
+    if (lineTwoTimer) window.clearTimeout(lineTwoTimer);
+    lineTwoTimer = window.setTimeout(applyLineTwoColor, 1700);
+  };
+
+  applyLineTwoColor();
+  queueLineTwoColorShift();
+
+  heroLineTwo.addEventListener("animationiteration", (event) => {
+    if (event.animationName !== "heroTitleRevealB") return;
+    queueLineTwoColorShift();
+  });
+}
 
 if (menuButton && navLinks) {
   const closeMenu = () => {
@@ -46,6 +93,57 @@ if (menuButton && navLinks) {
     if (navLinks.contains(event.target)) return;
     closeMenu();
   });
+}
+
+const navAnchors = Array.from(document.querySelectorAll("#navLinks a[href^='#']"));
+const sectionMap = new Map(
+  navAnchors
+    .map((anchor) => {
+      const href = anchor.getAttribute("href");
+      if (!href) return null;
+      return [anchor, document.querySelector(href)];
+    })
+    .filter((entry) => entry && entry[1])
+);
+
+const setActiveNavLink = (targetId) => {
+  navAnchors.forEach((anchor) => {
+    const isMatch = anchor.getAttribute("href") === `#${targetId}`;
+    anchor.classList.toggle("is-active", isMatch);
+    if (isMatch) {
+      anchor.setAttribute("aria-current", "page");
+    } else {
+      anchor.removeAttribute("aria-current");
+    }
+  });
+};
+
+if (sectionMap.size) {
+  const navObserver = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+      if (visible.length) {
+        setActiveNavLink(visible[0].target.id);
+      }
+    },
+    {
+      root: null,
+      threshold: [0.35, 0.55, 0.75],
+      rootMargin: "-20% 0px -55% 0px"
+    }
+  );
+
+  sectionMap.forEach((section) => navObserver.observe(section));
+
+  const initialHash = window.location.hash ? window.location.hash.slice(1) : "";
+  if (initialHash) {
+    setActiveNavLink(initialHash);
+  } else {
+    setActiveNavLink("home");
+  }
 }
 
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
