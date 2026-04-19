@@ -2497,6 +2497,79 @@ body.modal-open {
   border: 0;
 }
 
+.reviews-section {
+  padding: clamp(1rem, 2.5vw, 1.6rem) 0;
+}
+
+.reviews-section .section {
+  border-top: 1px solid #d7e2ef;
+  border-bottom: 1px solid #d7e2ef;
+  background: rgba(255, 255, 255, 0.97);
+  padding: clamp(1rem, 2.5vw, 1.4rem);
+}
+
+.reviews-section h3 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  color: #13253c;
+  letter-spacing: -0.02em;
+}
+
+.reviews-intro {
+  margin-top: 0.45rem;
+  color: #45607d;
+}
+
+.reviews-summary {
+  margin-top: 0.55rem;
+  color: #1d3a5a;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+}
+
+.reviews-slider {
+  position: relative;
+  margin-top: 0.85rem;
+  min-height: 13rem;
+}
+
+.review-slide {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #d2deee;
+  border-radius: 0.85rem;
+  background: linear-gradient(180deg, rgba(245, 250, 255, 0.95), rgba(250, 253, 255, 0.98));
+  padding: clamp(0.85rem, 2vw, 1.1rem);
+  opacity: 0;
+  transform: translateY(10px) scale(0.99);
+  transition: opacity 420ms ease, transform 420ms ease;
+  pointer-events: none;
+}
+
+.review-slide.is-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.review-stars {
+  color: #c8982d;
+  font-size: 1.06rem;
+  letter-spacing: 0.08em;
+}
+
+.review-text {
+  margin-top: 0.5rem;
+  color: #223b58;
+  line-height: 1.6;
+}
+
+.review-meta {
+  margin-top: 0.7rem;
+  color: #5a6f89;
+  font-size: 0.86rem;
+}
+
 .cta {
   display: inline-flex;
   align-items: center;

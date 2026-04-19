@@ -26,10 +26,35 @@ const inspirationModal = document.getElementById("inspirationModal");
 const openInspirationModal = document.getElementById("openInspirationModal");
 const closeInspirationModal = document.getElementById("closeInspirationModal");
 const inspirationModalBackdrop = document.getElementById("inspirationModalBackdrop");
+const googleReviewSummary = document.getElementById("googleReviewSummary");
+const fiveStarReviewsSlider = document.getElementById("fiveStarReviewsSlider");
 
 window.addEventListener("load", () => {
   document.body.classList.add("loaded");
 });
+
+const googlePlaceCache = new Map();
+
+const fetchGooglePlaceData = async (apiKey, placeId, fieldMask) => {
+  const cacheKey = `${apiKey}|${placeId}|${fieldMask}`;
+  if (googlePlaceCache.has(cacheKey)) return googlePlaceCache.get(cacheKey);
+
+  const request = fetch(`https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`, {
+    method: "GET",
+    headers: {
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask": fieldMask
+    }
+  }).then(async (response) => {
+    if (!response.ok) {
+      throw new Error(`Google Places request failed (${response.status})`);
+    }
+    return response.json();
+  });
+
+  googlePlaceCache.set(cacheKey, request);
+  return request;
+};
 
 if (inspirationModal && openInspirationModal && closeInspirationModal && inspirationModalBackdrop) {
   const setModalOpen = (isOpen) => {
@@ -166,20 +191,7 @@ if (hoursCompact) {
     }
     try {
       updateStatus("Refreshing hours from Google...");
-      const endpoint = `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`;
-      const response = await fetch(endpoint, {
-        method: "GET",
-        headers: {
-          "X-Goog-Api-Key": apiKey,
-          "X-Goog-FieldMask": "regularOpeningHours,currentOpeningHours"
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`Google hours request failed (${response.status})`);
-      }
-
-      const data = await response.json();
+      const data = await fetchGooglePlaceData(apiKey, placeId, "regularOpeningHours,currentOpeningHours");
       const weekdayDescriptions =
         data?.regularOpeningHours?.weekdayDescriptions ||
         data?.currentOpeningHours?.weekdayDescriptions ||
@@ -208,6 +220,97 @@ if (hoursCompact) {
   };
 
   fetchGoogleHours();
+}
+
+if (googleReviewSummary && fiveStarReviewsSlider) {
+  const config = window.LEGACY_GOOGLE_HOURS || {};
+  const placeId = config.placeId || "ChIJQ9mMzOKpsYkRvmBVaSQ0u6o";
+  const apiKey = (config.apiKey || "").trim();
+
+  const toReviewText = (review) => {
+    return (
+      review?.originalText?.text ||
+      review?.text?.text ||
+      "Great experience."
+    );
+  };
+
+  const renderFiveStarSlides = (reviews) => {
+    fiveStarReviewsSlider.innerHTML = "";
+    const topReviews = reviews.slice(0, 8);
+    topReviews.forEach((review, idx) => {
+      const slide = document.createElement("article");
+      slide.className = `review-slide${idx === 0 ? " is-active" : ""}`;
+
+      const stars = document.createElement("p");
+      stars.className = "review-stars";
+      stars.textContent = "★★★★★";
+      stars.setAttribute("aria-label", "5 out of 5 stars");
+
+      const text = document.createElement("p");
+      text.className = "review-text";
+      text.textContent = toReviewText(review);
+
+      const meta = document.createElement("p");
+      meta.className = "review-meta";
+      const author = review?.authorAttribution?.displayName || "Google Reviewer";
+      const when = review?.relativePublishTimeDescription || "";
+      meta.textContent = when ? `${author} • ${when}` : author;
+
+      slide.appendChild(stars);
+      slide.appendChild(text);
+      slide.appendChild(meta);
+      fiveStarReviewsSlider.appendChild(slide);
+    });
+
+    const slides = Array.from(fiveStarReviewsSlider.querySelectorAll(".review-slide"));
+    if (slides.length <= 1) return;
+    let active = 0;
+    window.setInterval(() => {
+      slides[active].classList.remove("is-active");
+      active = (active + 1) % slides.length;
+      slides[active].classList.add("is-active");
+    }, 4600);
+  };
+
+  const loadGoogleReviews = async () => {
+    if (!apiKey) {
+      googleReviewSummary.textContent = "Google rating appears here when API key is connected.";
+      return;
+    }
+
+    try {
+      const data = await fetchGooglePlaceData(apiKey, placeId, "rating,userRatingCount,reviews");
+      const rating = Number(data?.rating);
+      const total = Number(data?.userRatingCount);
+
+      if (Number.isFinite(rating) && Number.isFinite(total)) {
+        googleReviewSummary.textContent = `Google rating: ${rating.toFixed(1)} / 5 from ${total.toLocaleString()} reviews.`;
+      } else {
+        googleReviewSummary.textContent = "Google review summary is currently unavailable.";
+      }
+
+      const reviews = Array.isArray(data?.reviews) ? data.reviews : [];
+      const fiveStarOnly = reviews.filter((review) => Number(review?.rating) >= 5);
+      if (!fiveStarOnly.length) {
+        fiveStarReviewsSlider.innerHTML = `
+          <article class="review-slide is-active">
+            <p class="review-stars" aria-label="5 out of 5 stars">★★★★★</p>
+            <p class="review-text">No live 5-star review entries are available right now. Please check back soon.</p>
+            <p class="review-meta">Google Reviews</p>
+          </article>
+        `;
+        return;
+      }
+
+      renderFiveStarSlides(fiveStarOnly);
+    } catch (error) {
+      googleReviewSummary.textContent = "Could not load Google reviews right now.";
+      console.error(error);
+    }
+  };
+
+  loadGoogleReviews();
 }
 
 if (heroLineTwo) {
