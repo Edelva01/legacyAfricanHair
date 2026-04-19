@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Legacy African Hair Braiding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=General+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" href="assets/brand/Logoclearbackground.png" />
+    <link rel="apple-touch-icon" href="assets/brand/Logoclearbackground.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="progress" aria-hidden="true"><span id="scrollProgress"></span></div>
+
+    <header class="topbar">
+      <a href="#home" class="brand brand-wrap">
+        <img src="assets/brand/Logoclearbackground.png" alt="Legacy African Hair Braiding logo" class="brand-logo" />
+        <span>legacy african hair braiding</span>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
+      <nav id="navLinks" class="nav-links" aria-label="Primary Navigation">
+        <div class="nav-logo-wrap">
+          <img src="assets/brand/Logoclearbackground.png" alt="Legacy African Hair Braiding logo" class="nav-logo" />
+        </div>
+        <a href="#home">Home</a>
+        <a href="#work">Styles</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#visit">Contact Us</a>
+        <a href="#contact">Book</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero reveal">
+        <video
+          class="hero-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          poster="assets/gallery/gallery-1.jpg"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-getting-her-hair-done-45176-large.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content section">
+          <p class="eyebrow hero-kicker">Legacy African Hair Braiding Salon</p>
+          <h1>
+            <span class="hero-title hero-title-a">Legacy African</span>
+            <span class="line2 hero-title hero-title-b">Hair Braiding</span>
+          </h1>
+          <p class="hero-copy hero-copy-a">
+            Over 20 years of expert braiding in Hopewell, with modern and classic styles at affordable prices.
+          </p>
+          <div class="hero-motion-text" aria-label="Animated service highlights">
+            <span class="motion-line motion-zoom">Knotless Braids That Flow</span>
+            <span class="motion-line motion-slide">Boho Braids In Motion</span>
+            <span class="motion-line motion-scroll">Feed-In Cornrows Precision</span>
+            <span class="motion-line motion-fade">Twist Styles That Stand Out</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="signature-banner section reveal">
+        <div class="pill-row">
+          <span>20+ Years Experience</span>
+          <span>Women, Men, and Kids</span>
+          <span>Innovative Styles, Old and New</span>
+          <span>Hopewell, Virginia</span>
+          <span>Call (804) 605-6115</span>
+        </div>
+      </section>
+
+      <section id="work" class="case-studies section reveal">
+        <div class="case-list" role="listbox" aria-label="Case studies">
+          <button class="case-item is-active" data-accent="#f0d08d" data-image="assets/products/knotless-braids.jpg" data-meta="Signature Service" data-description="Lightweight, versatile knotless braids with precise parting and a natural finish designed for comfort and style longevity.">
+            <span>Knotless Braids</span>
+          </button>
+          <button class="case-item" data-accent="#dca6ff" data-image="assets/products/boho-braids.jpg" data-meta="Protective Styling" data-description="Soft boho braids with textured curls for movement and volume, ideal for a full glam look.">
+            <span>Boho Braids</span>
+          </button>
+          <button class="case-item" data-accent="#95c7ff" data-image="assets/products/feed-in-cornrows.jpg" data-meta="Scalp Braiding" data-description="Detailed feed-in cornrows and stitch lines tailored to your head shape for clean, bold definition.">
+            <span>Feed-In Cornrows</span>
+          </button>
+          <button class="case-item" data-accent="#ffb998" data-image="assets/products/fulani-braids.jpg" data-meta="Traditional Inspired" data-description="Iconic Fulani braid patterns with beads and custom front detailing for a statement style.">
+            <span>Fulani Braids</span>
+          </button>
+          <button class="case-item" data-accent="#9af6d8" data-image="assets/products/twist-styles.jpg" data-meta="Two-Strand Styling" data-description="Passion and Senegalese twist options that are lightweight, elegant, and great for low-manipulation care.">
+            <span>Twist Styles</span>
+          </button>
+          <button class="case-item" data-accent="#ffe3a4" data-image="assets/products/kids-braids.jpg" data-meta="Kids Friendly" data-description="Neat and comfortable kids braids with age-appropriate styling and scalp-friendly parting.">
+            <span>Kids Braids</span>
+          </button>
+          <button class="case-item" data-accent="#b6d2ff" data-image="assets/products/feed-in-cornrows.jpg" data-meta="Precision Parts" data-description="Stitch braid looks with clean parts and defined lines for a sleek, long-wear finish.">
+            <span>Stitch Braids</span>
+          </button>
+          <button class="case-item" data-accent="#d7f5c1" data-image="assets/products/twist-styles.jpg" data-meta="Protective Twists" data-description="Senegalese twist installs with smooth rope texture and lightweight movement.">
+            <span>Senegalese Twists</span>
+          </button>
+        </div>
+
+        <article class="case-preview" id="casePreview">
+          <img id="previewImage" src="assets/products/knotless-braids.jpg" alt="Hair braiding style preview" />
+          <div class="case-preview-overlay"></div>
+          <div class="case-preview-copy">
+            <p id="previewMeta">Signature Service</p>
+            <h2 id="previewTitle">Knotless Braids</h2>
+            <p id="previewDescription">Lightweight, versatile knotless braids with precise parting and a natural finish designed for comfort and style longevity.</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="gallery" class="motion-gallery reveal" aria-label="Hair style lookbook">
+        <div class="gallery-billboard" id="galleryBillboard">
+          <div class="gallery-stage billboard-screen main-photo-stage" id="galleryStage">
+            <img id="mainPhotoCurrent" class="main-photo is-current" src="assets/gallery/gallery-1.jpg" alt="Legacy African Hair Braiding style showcase" />
+            <img id="mainPhotoNext" class="main-photo" src="assets/gallery/gallery-2.jpg" alt="Legacy African Hair Braiding style showcase" />
+            <div id="dualBillboard" class="dual-billboard" aria-hidden="true">
+              <img id="dualPhotoLeft" class="dual-photo dual-left" src="assets/gallery/gallery-3.jpg" alt="Legacy African Hair Braiding style showcase" />
+              <img id="dualPhotoRight" class="dual-photo dual-right" src="assets/gallery/gallery-4.jpg" alt="Legacy African Hair Braiding style showcase" />
+            </div>
+            <div class="main-photo-overlay"></div>
+            <div class="main-photo-caption">
+              <div class="caption-motion-text" aria-live="polite">
+                <span class="motion-line billboard-dynamic size-lg"></span>
+                <span class="motion-line billboard-dynamic size-md"></span>
+                <span class="motion-line billboard-dynamic size-sm"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="visit" class="about section reveal">
+        <h3>Contact Us</h3>
+        <p>
+          3219 Woodlawn St A, Hopewell, VA 23860. Call (804) 605-6115 to book, or use the links below to connect, browse photos, and reserve your appointment.
+        </p>
+        <div class="hours-compact" aria-label="Salon hours">
+          <strong>Hours</strong>
+          <span>Mon-Wed: 9:30 AM - 7:00 PM</span>
+          <span>Thu-Sat: 9:00 AM - 8:00 PM</span>
+          <span>Sun: 10:00 AM (Appointment only)</span>
+        </div>
+        <div class="link-grid">
+          <a class="social-card" href="https://www.fresha.com/lvp/legacy-african-hair-braiding-woodlawn-street-hopewell-PVqraG" target="_blank" rel="noopener noreferrer">
+            <strong>Book on Fresha</strong>
+            <span>Online booking and venue details</span>
+          </a>
+          <a class="social-card" href="https://www.instagram.com/legacyhairbraiding/" target="_blank" rel="noopener noreferrer">
+            <strong>Instagram</strong>
+            <span>@legacyhairbraiding</span>
+          </a>
+          <a class="social-card" href="https://www.facebook.com/p/Legacy-African-Hair-Braiding-Lala-100070744042601/" target="_blank" rel="noopener noreferrer">
+            <strong>Facebook</strong>
+            <span>Legacy African Hair Braiding Lala</span>
+          </a>
+          <a class="social-card" href="https://legacy-african-hair-braiding.wheree.com/" target="_blank" rel="noopener noreferrer">
+            <strong>Wheree Profile</strong>
+            <span>Reviews, photos, and amenities</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="contact" class="contact reveal">
+        <div class="section">
+          <h2>Book your braiding appointment.</h2>
+          <div class="cta-group">
+            <a href="tel:+18046056115" class="cta">Call (804) 605-6115</a>
+            <a href="https://www.fresha.com/lvp/legacy-african-hair-braiding-woodlawn-street-hopewell-PVqraG" target="_blank" rel="noopener noreferrer" class="cta cta-secondary">Book on Fresha</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-shell">
+        <img src="assets/brand/Logoclearbackground.png" alt="Legacy African Hair Braiding logo" class="footer-logo" />
+        <div class="service-highlights footer-highlights">
+          <p><strong>Hair Styling:</strong> Braiding for women, men, and kids with innovative styles, old and new.</p>
+          <p><strong>Over 20 Years:</strong> Legacy African Hair Braiding has served customers for over 20 years.</p>
+          <p><strong>Book by Phone:</strong> Call (804) 605-6115 to book an appointment.</p>
+        </div>
+        <div class="footer-meta">
+          <p>Legacy African Hair Braiding, 2026</p>
+          <a href="#home">Back to top</a>
+        </div>
+      </div>
+    </footer>
+
+    <a href="tel:+18046056115" class="floating-call" aria-label="Call Legacy African Hair Braiding">
+      Call (804) 605-6115
+    </a>
+
+    <script src="script.js"></script>
+  </body>
+</html>
