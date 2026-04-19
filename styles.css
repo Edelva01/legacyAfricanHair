@@ -1915,12 +1915,22 @@ p {
   font-size: 0.94rem;
 }
 
+.hours-status {
+  font-size: 0.82rem !important;
+  letter-spacing: 0.01em;
+  opacity: 0.95;
+}
+
 #visit .hours-compact strong {
   color: #f3f7ff;
 }
 
 #visit .hours-compact span {
   color: rgba(225, 236, 251, 0.92);
+}
+
+#visit .hours-status {
+  color: rgba(206, 224, 249, 0.86) !important;
 }
 
 .link-grid {
@@ -1981,6 +1991,107 @@ p {
 #visit .social-card:hover {
   border-color: rgba(232, 241, 255, 0.86);
   background: rgba(16, 31, 51, 0.78);
+}
+
+.inspiration-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.inspiration-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.inspiration-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 10, 19, 0.42);
+  backdrop-filter: blur(3px) saturate(1.03);
+}
+
+.inspiration-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 1rem, 960px);
+  max-height: min(86vh, 820px);
+  overflow: auto;
+  border: 1px solid rgba(205, 218, 238, 0.84);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 251, 255, 0.94));
+  box-shadow: 0 18px 44px rgba(5, 12, 22, 0.33);
+  padding: clamp(1rem, 2.6vw, 1.6rem);
+}
+
+.inspiration-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  border: 1px solid #b9cbe2;
+  background: #f4f8ff;
+  color: #1c334e;
+  border-radius: 999px;
+  padding: 0.32rem 0.72rem;
+  font-size: 0.76rem;
+  font-family: "Space Grotesk", sans-serif;
+  cursor: pointer;
+}
+
+.inspiration-modal-panel h2 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: #13253c;
+  letter-spacing: -0.02em;
+}
+
+.inspiration-modal-panel p {
+  margin-top: 0.55rem;
+  color: #425d79;
+  max-width: 62ch;
+}
+
+.inspiration-modal-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.inspiration-card {
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+}
+
+.inspiration-modal.is-open .inspiration-card {
+  animation: inspirationCardIn 560ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.inspiration-modal.is-open .inspiration-card:nth-child(1) { animation-delay: 20ms; }
+.inspiration-modal.is-open .inspiration-card:nth-child(2) { animation-delay: 120ms; }
+.inspiration-modal.is-open .inspiration-card:nth-child(3) { animation-delay: 220ms; }
+.inspiration-modal.is-open .inspiration-card:nth-child(4) { animation-delay: 320ms; }
+
+@keyframes inspirationCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+body.modal-open {
+  overflow: hidden;
 }
 
 .contact {
@@ -2861,6 +2972,16 @@ p {
 
   .footer {
     padding: 0;
+  }
+
+  .inspiration-modal-panel {
+    width: min(100% - 0.5rem, 940px);
+    max-height: 88vh;
+    padding: 0.95rem;
+  }
+
+  .inspiration-modal-grid {
+    grid-template-columns: 1fr;
   }
 
   .footer-shell {

@@ -21,10 +21,194 @@ const dualPhotoRight = document.getElementById("dualPhotoRight");
 const mainPhotoCaption = document.querySelector(".main-photo-caption");
 const captionMotionLines = Array.from(document.querySelectorAll(".caption-motion-text .motion-line:not(.billboard-dynamic)"));
 const appointmentFlashCloud = document.getElementById("appointmentFlashCloud");
+const hoursCompact = document.querySelector("#visit .hours-compact");
+const inspirationModal = document.getElementById("inspirationModal");
+const openInspirationModal = document.getElementById("openInspirationModal");
+const closeInspirationModal = document.getElementById("closeInspirationModal");
+const inspirationModalBackdrop = document.getElementById("inspirationModalBackdrop");
 
 window.addEventListener("load", () => {
   document.body.classList.add("loaded");
 });
+
+if (inspirationModal && openInspirationModal && closeInspirationModal && inspirationModalBackdrop) {
+  const setModalOpen = (isOpen) => {
+    inspirationModal.classList.toggle("is-open", isOpen);
+    inspirationModal.setAttribute("aria-hidden", String(!isOpen));
+    document.body.classList.toggle("modal-open", isOpen);
+  };
+
+  openInspirationModal.addEventListener("click", (event) => {
+    event.preventDefault();
+    setModalOpen(true);
+  });
+
+  closeInspirationModal.addEventListener("click", () => setModalOpen(false));
+  inspirationModalBackdrop.addEventListener("click", () => setModalOpen(false));
+
+  inspirationModal.addEventListener("click", (event) => {
+    const anchor = event.target.closest("a[href^='#']");
+    if (!anchor) return;
+    setModalOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (inspirationModal.getAttribute("aria-hidden") === "true") return;
+    setModalOpen(false);
+  });
+}
+
+if (hoursCompact) {
+  const hoursStatus = document.getElementById("hoursStatus");
+  const config = window.LEGACY_GOOGLE_HOURS || {};
+  const placeId = config.placeId || "ChIJQ9mMzOKpsYkRvmBVaSQ0u6o";
+  const apiKey = (config.apiKey || "").trim();
+  const dayOrder = [
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+    "SUNDAY"
+  ];
+  const dayLabel = {
+    MONDAY: "Mon",
+    TUESDAY: "Tue",
+    WEDNESDAY: "Wed",
+    THURSDAY: "Thu",
+    FRIDAY: "Fri",
+    SATURDAY: "Sat",
+    SUNDAY: "Sun"
+  };
+
+  const formatTime = (hour = 0, minute = 0) => {
+    const h = Number(hour);
+    const m = Number(minute);
+    const period = h >= 12 ? "PM" : "AM";
+    const normalizedHour = ((h + 11) % 12) + 1;
+    return `${normalizedHour}:${String(m).padStart(2, "0")} ${period}`;
+  };
+
+  const updateStatus = (text) => {
+    if (!hoursStatus) return;
+    hoursStatus.textContent = text;
+  };
+
+  const normalizeGoogleDay = (dayValue) => {
+    if (typeof dayValue === "string") return dayValue.toUpperCase();
+    if (typeof dayValue === "number") {
+      const numericDayMap = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+      return numericDayMap[dayValue] || null;
+    }
+    return null;
+  };
+
+  const buildDayRanges = (periods) => {
+    const byDay = new Map(dayOrder.map((day) => [day, []]));
+    (periods || []).forEach((period) => {
+      const open = period?.open;
+      const close = period?.close;
+      const day = normalizeGoogleDay(open?.day);
+      if (!day) return;
+      const openText = formatTime(open.hour, open.minute);
+      const closeText = close ? formatTime(close.hour, close.minute) : "Open 24 hours";
+      const range = close ? `${openText} - ${closeText}` : closeText;
+      if (!byDay.has(day)) byDay.set(day, []);
+      byDay.get(day).push(range);
+    });
+    return byDay;
+  };
+
+  const renderWeekdayDescriptions = (weekdayDescriptions) => {
+    const dayFromTitle = {
+      monday: "MONDAY",
+      tuesday: "TUESDAY",
+      wednesday: "WEDNESDAY",
+      thursday: "THURSDAY",
+      friday: "FRIDAY",
+      saturday: "SATURDAY",
+      sunday: "SUNDAY"
+    };
+
+    let appliedCount = 0;
+    (weekdayDescriptions || []).forEach((line) => {
+      const raw = String(line || "");
+      const parts = raw.split(":");
+      if (parts.length < 2) return;
+      const key = parts[0].trim().toLowerCase();
+      const dayKey = dayFromTitle[key];
+      if (!dayKey) return;
+      const lineNode = hoursCompact.querySelector(`[data-hours-day="${dayKey}"]`);
+      if (!lineNode) return;
+      lineNode.textContent = `${dayLabel[dayKey]}: ${parts.slice(1).join(":").trim()}`;
+      appliedCount += 1;
+    });
+    return appliedCount > 0;
+  };
+
+  const renderHours = (periods) => {
+    const byDay = buildDayRanges(periods);
+    dayOrder.forEach((day) => {
+      const line = hoursCompact.querySelector(`[data-hours-day="${day}"]`);
+      if (!line) return;
+      const ranges = byDay.get(day) || [];
+      const formatted = ranges.length ? ranges.join(", ") : "Closed";
+      line.textContent = `${dayLabel[day]}: ${formatted}`;
+    });
+  };
+
+  const fetchGoogleHours = async () => {
+    if (!apiKey) {
+      updateStatus("");
+      return;
+    }
+    try {
+      updateStatus("Refreshing hours from Google...");
+      const endpoint = `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`;
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          "X-Goog-Api-Key": apiKey,
+          "X-Goog-FieldMask": "regularOpeningHours,currentOpeningHours"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Google hours request failed (${response.status})`);
+      }
+
+      const data = await response.json();
+      const weekdayDescriptions =
+        data?.regularOpeningHours?.weekdayDescriptions ||
+        data?.currentOpeningHours?.weekdayDescriptions ||
+        [];
+      const renderedFromDescriptions = renderWeekdayDescriptions(weekdayDescriptions);
+
+      if (!renderedFromDescriptions) {
+        const periods = data?.regularOpeningHours?.periods || data?.currentOpeningHours?.periods || [];
+        if (!periods.length) {
+          updateStatus("Google hours unavailable. Showing default hours.");
+          return;
+        }
+        renderHours(periods);
+      }
+
+      const openNow = data?.currentOpeningHours?.openNow;
+      if (typeof openNow === "boolean") {
+        updateStatus(openNow ? "Live from Google: Open now" : "Live from Google: Closed now");
+      } else {
+        updateStatus("Live from Google Business Profile");
+      }
+    } catch (error) {
+      updateStatus("Could not load Google hours. Showing default hours.");
+      console.error(error);
+    }
+  };
+
+  fetchGoogleHours();
+}
 
 if (heroLineTwo) {
   const lineTwoPalette = [
