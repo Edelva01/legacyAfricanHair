@@ -192,7 +192,7 @@
           <div class="cta-group">
             <a href="tel:+18046056115" class="cta">Call (804) 605-6115</a>
             <a href="https://www.fresha.com/lvp/legacy-african-hair-braiding-woodlawn-street-hopewell-PVqraG" target="_blank" rel="noopener noreferrer" class="cta cta-secondary">Book on Fresha</a>
-            <a href="inspiration.html" class="cta cta-secondary" id="openInspirationModal">Style &amp; Inspiration</a>
+            <a href="inspiration.html" class="cta cta-secondary" id="openInspirationModal" data-track-event="open_style_inspiration_modal">Style &amp; Inspiration</a>
           </div>
         </div>
       </section>
@@ -226,26 +226,26 @@
     </main>
 
     <div class="inspiration-modal" id="inspirationModal" aria-hidden="true">
-      <div class="inspiration-modal-backdrop" id="inspirationModalBackdrop"></div>
+      <div class="inspiration-modal-backdrop" id="inspirationModalBackdrop" data-track-event="close_style_inspiration_modal_backdrop"></div>
       <section class="inspiration-modal-panel" role="dialog" aria-modal="true" aria-labelledby="inspirationModalTitle">
-        <button type="button" class="inspiration-modal-close" id="closeInspirationModal" aria-label="Close style inspiration">
+        <button type="button" class="inspiration-modal-close" id="closeInspirationModal" aria-label="Close style inspiration" data-track-event="close_style_inspiration_modal_button">
           Close
         </button>
         <h2 id="inspirationModalTitle">Style &amp; Inspiration</h2>
         <div class="inspiration-modal-grid">
-          <a class="social-card inspiration-card" href="https://www.instagram.com/legacyhairbraiding/" target="_blank" rel="noopener noreferrer">
+          <a class="social-card inspiration-card" href="https://www.instagram.com/legacyhairbraiding/" target="_blank" rel="noopener noreferrer" data-track-event="inspiration_modal_instagram_click">
             <strong>Legacy Instagram</strong>
             <span>View recent style examples and look ideas from our page.</span>
           </a>
-          <a class="social-card inspiration-card" href="#gallery">
+          <a class="social-card inspiration-card" href="#gallery" data-track-event="inspiration_modal_gallery_click">
             <strong>Legacy Gallery</strong>
             <span>See our own gallery photos and signature braided styles.</span>
           </a>
-          <a class="social-card inspiration-card" href="https://www.pinterest.com/emile1945/african-braids-hairstyles/" target="_blank" rel="noopener noreferrer">
+          <a class="social-card inspiration-card" href="https://www.pinterest.com/emile1945/african-braids-hairstyles/" target="_blank" rel="noopener noreferrer" data-track-event="inspiration_modal_pinterest_click">
             <strong>Pinterest Braid Inspiration</strong>
             <span>Browse broad collections of braid looks and save your favorites.</span>
           </a>
-          <a class="social-card inspiration-card" href="https://www.styleseat.com/blog/" target="_blank" rel="noopener noreferrer">
+          <a class="social-card inspiration-card" href="https://www.styleseat.com/blog/" target="_blank" rel="noopener noreferrer" data-track-event="inspiration_modal_styleseat_click">
             <strong>StyleSeat Beauty Blog</strong>
             <span>Read hairstyle trends, tips, and event-ready hair inspiration.</span>
           </a>
@@ -296,6 +296,10 @@
         apiKey: "" // Add your restricted Google Places API key here.
       };
     </script>
+    <script
+      src="https://links.elovainc.com/js/external-tracking.js"
+      data-tracking-id="tk_ed5844c6c0284afb8878c6f049c4608d"
+    ></script>
     <script src="script.js"></script>
     <script src="https://elfsightcdn.com/platform.js" async></script>
   </body>

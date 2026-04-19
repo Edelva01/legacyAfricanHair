@@ -64,6 +64,31 @@ const fetchGooglePlaceData = async (apiKey, placeId, fieldMask, options = {}) =>
   return request;
 };
 
+const trackSiteEvent = (eventName, details = {}) => {
+  if (!eventName) return;
+
+  const payload = {
+    event: eventName,
+    page_path: window.location.pathname,
+    page_title: document.title,
+    ...details
+  };
+
+  if (Array.isArray(window.dataLayer)) {
+    window.dataLayer.push(payload);
+  }
+
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, details);
+  }
+
+  document.dispatchEvent(
+    new CustomEvent("legacy:tracking", {
+      detail: payload
+    })
+  );
+};
+
 if (inspirationModal && openInspirationModal && closeInspirationModal && inspirationModalBackdrop) {
   const setModalOpen = (isOpen) => {
     inspirationModal.classList.toggle("is-open", isOpen);
@@ -73,21 +98,38 @@ if (inspirationModal && openInspirationModal && closeInspirationModal && inspira
 
   openInspirationModal.addEventListener("click", (event) => {
     event.preventDefault();
+    trackSiteEvent("inspiration_modal_open", { location: "book_section_cta" });
     setModalOpen(true);
   });
 
-  closeInspirationModal.addEventListener("click", () => setModalOpen(false));
-  inspirationModalBackdrop.addEventListener("click", () => setModalOpen(false));
+  closeInspirationModal.addEventListener("click", () => {
+    trackSiteEvent("inspiration_modal_close", { location: "close_button" });
+    setModalOpen(false);
+  });
+  inspirationModalBackdrop.addEventListener("click", () => {
+    trackSiteEvent("inspiration_modal_close", { location: "backdrop_click" });
+    setModalOpen(false);
+  });
 
   inspirationModal.addEventListener("click", (event) => {
+    const externalLink = event.target.closest("a[href]");
+    if (externalLink) {
+      trackSiteEvent("inspiration_modal_link_click", {
+        href: externalLink.getAttribute("href") || "",
+        label: (externalLink.textContent || "").trim().slice(0, 80)
+      });
+    }
+
     const anchor = event.target.closest("a[href^='#']");
     if (!anchor) return;
+    trackSiteEvent("inspiration_modal_close", { location: "anchor_navigation" });
     setModalOpen(false);
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
     if (inspirationModal.getAttribute("aria-hidden") === "true") return;
+    trackSiteEvent("inspiration_modal_close", { location: "escape_key" });
     setModalOpen(false);
   });
 }
