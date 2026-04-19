@@ -847,13 +847,10 @@ p {
   margin-top: 0;
   margin-bottom: 0;
   padding: clamp(1.25rem, 2.6vw, 2rem);
-  border-top: 1px solid rgba(193, 206, 225, 0.7);
-  border-bottom: 1px solid rgba(193, 206, 225, 0.7);
-  border-left: 1px solid rgba(193, 206, 225, 0.7);
-  border-right: 1px solid rgba(193, 206, 225, 0.7);
-  border-radius: 0.9rem;
+  border: 0;
+  border-radius: 0;
   background: transparent;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 24px rgba(12, 24, 40, 0.18);
+  box-shadow: none;
 }
 
 #visit.about > * {
